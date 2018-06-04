@@ -1,0 +1,2645 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="./echarts/echarts.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+			
+		</script>
+
+		<style>
+			body {
+				background: rgb(0, 4, 16)
+			}
+			
+			.chartStyle {
+				height: 5rem;
+				width: 6rem;
+				padding: 0.2rem;
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+			}
+			
+			.mui-slider-item {
+				text-align: center;
+				padding: 0.1rem;
+			}
+			
+			.chartLayout {
+				display: inline-block;
+				position: relative;
+				/*margin-top: 0.2rem;*/
+				box-shadow: inset 0 0 0.2rem rgb(29, 62, 135);
+				height: 100%;
+				border: 1px solid rgb(57, 125, 195);
+				background: url(./img/lt.png) no-repeat left top, url(./img/rt.png) no-repeat right top, url(./img/rb.png) no-repeat right bottom, url(./img/lb.png) no-repeat left bottom;
+			}
+			.marginTop20{
+				margin-top:0.2rem;
+			}
+			
+			.title {
+				display: block;
+				position: absolute;
+				left: 50%;
+				-webkit-transform: translateX(-50%);
+				-moz-transform: translateX(-50%);
+				-ms-transform: translateX(-50%);
+				transform: translateX(-50%);
+				top: -6px;
+				/* border-left: 1px solid skyblue; */
+				color: rgb(141, 199, 239);
+				background: rgb(1, 12, 60);
+			}
+			
+			.title_cont {
+				height: 0.26rem;
+				line-height: 0.26rem;
+				float: left;
+				padding: 0 0.15rem;
+			}
+			
+			.title_color {
+				font-weight: bold;
+				font-style: normal;
+				color: darkorange;
+			}
+			
+			.title_L,
+			.title_R {
+				float: left;
+				width: 0.06rem;
+				height: 0.26rem;
+				background: url(./img/title_L.png) no-repeat center;
+				background-size: 0.06rem 0.17rem;
+			}
+			
+			.title_R {
+				background: url(./img/title_R.png) no-repeat center;
+				background-size: 0.06rem 0.17rem;
+			}
+			
+			.mapStyle {
+				height: 10.4rem;
+			}
+			
+			@media all and (orientation: landscape) {
+				/*　　这是匹配横屏的状态，横屏时的css代码　　*/
+				.chartStyle {
+					width: 2.9rem;
+					height: 2.8rem;
+				}
+				.chartLayout {
+					margin-top: 0;
+				}
+				.mapStyle {
+					width: 6rem;
+				}
+			}
+			/*@media all and (orientation: portrait) {*/
+			/*　　这是匹配竖屏的状态，竖屏时的css代码　　
+				
+			}
+		</style>
+	</head>
+
+	<body>
+		<div style="background:url(img/IPTV.png) no-repeat center;background-size:9.8rem;height:0.5rem;"></div>
+		<div class="mui-slider">
+			<div class="mui-slider-group">
+				<!--第一页-->
+				<div class="mui-slider-item">
+
+					<div class="chartLayout">
+						<span class="title">
+						<i class="title_L"></i>
+						<span class="title_cont"><i class="title_color"> </i></span>
+						<i class="title_R"></i>
+						</span>
+						<!--地图-->
+						<div id="echart2" class="chartStyle mapStyle"></div>
+
+					</div>
+				</div>
+				<!--第二页-->
+				<div class="mui-slider-item">
+
+					<div class="chartLayout">
+						<span class="title">
+						<i class="title_L"></i>
+						<span class="title_cont"><i class="title_color">0话务基站</i></span>
+						<i class="title_R"></i>
+						</span>
+						<!---->
+						<div id="myChart1" class="chartStyle"></div>
+					</div>
+					<div class="chartLayout marginTop20">
+						<span class="title">
+						<i class="title_L"></i>
+						<span class="title_cont"><i class="title_color">数据流量/话务量</i></span>
+						<i class="title_R"></i>
+						</span>
+						<div id="echart3" class="chartStyle"></div>
+					</div>
+				</div>
+				<!--第三页-->
+				<div class="mui-slider-item">
+					<div class="chartLayout">
+						<span class="title">
+						<i class="title_L"></i>
+						<span class="title_cont"><i class="title_color">3G分频段</i></span>
+						<i class="title_R"></i>
+						</span>
+						<div id="echart5" class="chartStyle"></div>
+					</div>
+					<div class="chartLayout marginTop20">
+						<span class="title">
+						<i class="title_L"></i>
+						<span class="title_cont"><i class="title_color">网络扩容-场景</i></span>
+						<i class="title_R"></i>
+						</span>
+						<div id="echart4" class="chartStyle"></div>
+					</div>
+				</div>
+
+				<!--第四页-->
+				<div class="mui-slider-item">
+					<div class="chartLayout">
+						<span class="title">
+						<i class="title_L"></i>
+						<span class="title_cont"><i class="title_color">全国断站</i></span>
+						<i class="title_R"></i>
+						</span>
+						<div id="echart6" class="chartStyle"></div>
+					</div>
+					<div class="chartLayout marginTop20">
+						<span class="title">
+						<i class="title_L"></i>
+						<span class="title_cont"><i class="title_color">弱覆盖小区数</i></span>
+						<i class="title_R"></i>
+						</span>
+						<div id="echart7" class="chartStyle"></div>
+					</div>
+				</div>
+
+				<!--第五页-->
+				<div class="mui-slider-item">
+					<div class="chartLayout">
+						<span class="title">
+						<i class="title_L"></i>
+						<span class="title_cont"><i class="title_color">感知速率</i></span>
+						<i class="title_R"></i>
+						</span>
+						<div id="echart8" class="chartStyle"></div>
+					</div>
+					<div class="chartLayout marginTop20">
+						<span class="title">
+						<i class="title_L"></i>
+						<span class="title_cont"><i class="title_color">弱覆盖比率</i></span>
+						<i class="title_R"></i>
+						</span>
+						<div id="echart9" class="chartStyle"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+</html>
+<script src="js/data.js"></script>
+<script>
+	//	$(function(){
+	//	})
+	window.onload = function() {
+		/*720代表设计师给的设计稿的宽度，你的设计稿是多少，就写多少;100代表换算比例，这里写100是
+		  为了以后好算,比如，你测量的一个宽度是100px,就可以写为1rem,以及1px=0.01rem等等*/
+		getRem(640, 100)
+		chartInit()
+	};
+	window.onresize = function() {
+		getRem(640, 100);
+		chart.resize();
+		myChart1.resize();
+		myChart3.resize();
+		myChart4.resize();
+		myChart5.resize();
+		myChart6.resize();
+		myChart7.resize();
+		myChart8.resize();
+		myChart9.resize();
+
+	};
+
+	function getRem(pwidth, prem) {
+		var html = document.getElementsByTagName("html")[0];
+		var oWidth = document.body.clientWidth || document.documentElement.clientWidth;
+		html.style.fontSize = oWidth / pwidth * prem + "px";
+	}
+
+	function chartInit() {
+		initChartMap();
+		initChart1();
+		initChart3();
+		initChart4();
+		initChart5();
+		initChart6();
+		initChart7();
+		initChart8();
+		initChart9();
+
+	}
+	//地图init
+	function initChartMap() {
+		$.get('css/china.json', function(chinaJson) {
+			echarts.registerMap('china', chinaJson);
+			chart = echarts.init(document.getElementById('echart2'));
+			var option6 = {
+				tooltip: {
+					trigger: 'item',
+					formatter: function(params) {
+						var res = params.name + '<br/>';
+						var myseries = option6.series;
+						for(var i = 0; i < myseries.length; i++) {
+							res += myseries[i].name;
+							for(var j = 0; j < myseries[i].data.length; j++) {
+								if(myseries[i].data[j].name == params.name) {
+									res += ' : ' + myseries[i].data[j].value + '</br>';
+								}
+							}
+						}
+						return res;
+					}
+
+				},
+				color: ['#fff', '#fff', '#fff', '#fff', '#fff'],
+
+				legend: {
+
+					left: 10,
+					top: 10,
+					selectedMode: 'single',
+					inactiveColor: '#444',
+					textStyle: {
+						color: 'white'
+					},
+					data: ['2G基站数', '3G基站数', '4G基站数', '', '2G小区数', '3G小区数', '4G小区数', '4G扩容基站数', '4G扩容小区数']
+				},
+				dataRange: {
+					left: 20,
+					bottom: 20,
+					textStyle: {
+						color: 'auto'
+					},
+					splitList: [{
+							start: 1.1,
+							label: '8000-10000'
+						},
+						{
+							start: 0.7,
+							end: 0.9,
+							label: '6000-8000'
+						},
+						{
+							start: 0.5,
+							end: 0.7,
+							label: '4000-6000'
+						},
+						{
+							start: 0.3,
+							end: 0.5,
+							label: '2000-4000'
+						},
+						{
+							end: 0.2,
+							label: '0-2000'
+						}
+					],
+					color: ['yellow', '#d6c820', '#d68520', '#d65320', 'rgba(0,0,0,0.2)']
+				},
+				series: [{
+						name: '2G基站数',
+						type: 'map',
+						mapType: 'china',
+						zoom: 1.1,
+						roam: true,
+						showLegendSymbol: false,
+						itemStyle: {
+							normal: {
+								//								 borderColor:'rgba(145,197,245,0.8)',
+								borderColor: 'rgba(57,74,90,0.9)',
+								borderWidth: 1,
+								opacity: 0.85,
+								label: {
+									show: true,
+									textStyle: {
+										color: '#333'
+									}
+								},
+
+							},
+							emphasis: {
+								label: {
+									show: true,
+									textStyle: {
+										color: '#2f4554'
+									}
+								},
+								//									areaStyle: {
+								//										show: true,
+								//										color: '#999'
+								//									}
+
+							}
+						},
+						data: [{
+								name: "南海诸岛",
+								value: 0,
+								itemStyle: {
+									normal: {
+										opacity: 0,
+										label: {
+											show: false
+										}
+									}
+								}
+							},
+							{
+								name: '北京',
+								value: 0.88,
+								value: 0
+							},
+							{
+								name: '天津',
+								value: 0.90,
+								value: 0,
+							},
+							{
+								name: '上海',
+								value: 0,
+								value: 0,
+							},
+							{
+								name: '重庆',
+								value: 0,
+								value: 0,
+							},
+							{
+								name: '河北',
+								value: 0.67,
+								value: 0,
+							},
+							{
+								name: '河南',
+								value: 0.90,
+								value: 1000
+							},
+							{
+								name: '云南',
+								value: 0
+							},
+							{
+								name: '辽宁',
+								value: 1.88
+							},
+							{
+								name: '黑龙江',
+								value: 0.95,
+								value: 0,
+							},
+							{
+								name: '湖南',
+								value: 0
+							},
+							{
+								name: '安徽',
+								value: 0
+							},
+							{
+								name: '山东',
+								value: 0.98,
+								value: 0,
+							},
+							{
+								name: '新疆',
+								value: 0
+							},
+							{
+								name: '江苏',
+								value: 0
+							},
+							{
+								name: '浙江',
+								value: 0
+							},
+							{
+								name: '江西',
+								value: 0
+							},
+							{
+								name: '湖北',
+								value: 0
+							},
+							{
+								name: '广西',
+								value: 0
+							},
+							{
+								name: '甘肃',
+								value: 0
+							},
+							{
+								name: '山西',
+								value: 0.88,
+								value: 0,
+							},
+							{
+								name: '内蒙古',
+								value: 0.75,
+								value: 0,
+							},
+							{
+								name: '陕西',
+								value: 0
+							},
+							{
+								name: '吉林',
+								value: 0.89,
+								value: 0,
+							},
+							{
+								name: '福建',
+								value: 0
+							},
+							{
+								name: '贵州',
+								value: 0
+							},
+							{
+								name: '广东',
+								value: 0
+							},
+							{
+								name: '青海',
+								value: 0
+							},
+							{
+								name: '西藏',
+								value: 0
+							},
+							{
+								name: '四川',
+								value: 0
+							},
+							{
+								name: '宁夏',
+								value: 0
+							},
+							{
+								name: '海南',
+								value: 0
+							},
+							{
+								name: '台湾',
+								value: 0
+							},
+							{
+								name: '香港',
+								value: 0
+							},
+							{
+								name: '澳门',
+								value: 0
+							}
+						]
+					},
+					{
+						name: '3G基站数',
+						type: 'map',
+						mapType: 'china',
+						zoom: 1.1,
+						roam: true,
+						showLegendSymbol: false,
+						itemStyle: {
+							normal: {
+								label: {
+									show: true
+								}
+							},
+							emphasis: {
+								label: {
+									show: true
+								}
+							}
+						},
+						data: [{
+								name: "南海诸岛",
+								value: 0,
+								itemStyle: {
+									normal: {
+										opacity: 0,
+										label: {
+											show: false
+										}
+									}
+								}
+							},
+							{
+								name: '北京',
+								value: 0.48,
+								value: 0,
+							},
+							{
+								name: '天津',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '上海',
+								value: 0
+							},
+							{
+								name: '重庆',
+								value: 0
+							},
+							{
+								name: '河北',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '河南',
+								value: 1.00,
+								value: 1000
+							},
+							{
+								name: '云南',
+								value: 0
+							},
+							{
+								name: '辽宁',
+								value: 1.60
+							},
+							{
+								name: '黑龙江',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '湖南',
+								value: 0
+							},
+							{
+								name: '安徽',
+								value: 0
+							},
+							{
+								name: '山东',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '新疆',
+								value: 0
+							},
+							{
+								name: '江苏',
+								value: 0
+							},
+							{
+								name: '浙江',
+								value: 0
+							},
+							{
+								name: '江西',
+								value: 0
+							},
+							{
+								name: '湖北',
+								value: 0
+							},
+							{
+								name: '广西',
+								value: 0
+							},
+							{
+								name: '甘肃',
+								value: 0
+							},
+							{
+								name: '山西',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '内蒙古',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '陕西',
+								value: 0
+							},
+							{
+								name: '吉林',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '福建',
+								value: 0
+							},
+							{
+								name: '贵州',
+								value: 0
+							},
+							{
+								name: '广东',
+								value: 0
+							},
+							{
+								name: '青海',
+								value: 0
+							},
+							{
+								name: '西藏',
+								value: 0
+							},
+							{
+								name: '四川',
+								value: 0
+							},
+							{
+								name: '宁夏',
+								value: 0
+							},
+							{
+								name: '海南',
+								value: 0
+							},
+							{
+								name: '台湾',
+								value: 0
+							},
+							{
+								name: '香港',
+								value: 0
+							},
+							{
+								name: '澳门',
+								value: 0
+							}
+						]
+					},
+					{
+						name: '4G基站数',
+						type: 'map',
+						mapType: 'china',
+						zoom: 1.1,
+						roam: true,
+						showLegendSymbol: false,
+						itemStyle: {
+							normal: {
+								label: {
+									show: true
+								}
+							},
+							emphasis: {
+								label: {
+									show: true
+								}
+							}
+						},
+						data: [{
+								name: "南海诸岛",
+								value: 0,
+								itemStyle: {
+									normal: {
+										opacity: 0,
+										label: {
+											show: false
+										}
+									}
+								}
+							},
+							{
+								name: '北京',
+								value: 0.86,
+								value: 0,
+							},
+							{
+								name: '天津',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '上海',
+								value: 0
+							},
+							{
+								name: '重庆',
+								value: 0
+							},
+							{
+								name: '河北',
+								value: 0.81,
+								value: 0,
+							},
+							{
+								name: '河南',
+								value: 0.90,
+								value: 1000
+							},
+							{
+								name: '云南',
+								value: 0
+							},
+							{
+								name: '辽宁',
+								value: 1.79
+							},
+							{
+								name: '黑龙江',
+								value: 0.83,
+								value: 0,
+							},
+							{
+								name: '湖南',
+								value: 0
+							},
+							{
+								name: '安徽',
+								value: 0
+							},
+							{
+								name: '山东',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '新疆',
+								value: 0
+							},
+							{
+								name: '江苏',
+								value: 0
+							},
+							{
+								name: '浙江',
+								value: 0
+							},
+							{
+								name: '江西',
+								value: 0
+							},
+							{
+								name: '湖北',
+								value: 0
+							},
+							{
+								name: '广西',
+								value: 0
+							},
+							{
+								name: '甘肃',
+								value: 0
+							},
+							{
+								name: '山西',
+								value: 0.34,
+								value: 0,
+							},
+							{
+								name: '内蒙古',
+								value: 0.96,
+								value: 0,
+							},
+							{
+								name: '陕西',
+								value: 0
+							},
+							{
+								name: '吉林',
+								value: 0.77,
+								value: 0,
+							},
+							{
+								name: '福建',
+								value: 0
+							},
+							{
+								name: '贵州',
+								value: 0
+							},
+							{
+								name: '广东',
+								value: 0
+							},
+							{
+								name: '青海',
+								value: 0
+							},
+							{
+								name: '西藏',
+								value: 0
+							},
+							{
+								name: '四川',
+								value: 0
+							},
+							{
+								name: '宁夏',
+								value: 0
+							},
+							{
+								name: '海南',
+								value: 0
+							},
+							{
+								name: '台湾',
+								value: 0
+							},
+							{
+								name: '香港',
+								value: 0
+							},
+							{
+								name: '澳门',
+								value: 0
+							}
+						]
+					},
+					{
+						name: '4G扩容基站数',
+						type: 'map',
+						mapType: 'china',
+						zoom: 1.1,
+						roam: true,
+						showLegendSymbol: false,
+						itemStyle: {
+							normal: {
+								label: {
+									show: true
+								}
+							},
+							emphasis: {
+								label: {
+									show: true
+								}
+							}
+						},
+						data: [{
+								name: "南海诸岛",
+								value: 0,
+								itemStyle: {
+									normal: {
+										opacity: 0,
+										label: {
+											show: false
+										}
+									}
+								}
+							},
+							{
+								name: '北京',
+								value: 0.72,
+								value: 0,
+							},
+							{
+								name: '天津',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '上海',
+								value: 0
+							},
+							{
+								name: '重庆',
+								value: 0
+							},
+							{
+								name: '河北',
+								value: 0.46,
+								value: 0,
+							},
+							{
+								name: '河南',
+								value: 0.88,
+								value: 1000
+							},
+							{
+								name: '云南',
+								value: 0
+							},
+							{
+								name: '辽宁',
+								value: 1.89
+							},
+							{
+								name: '黑龙江',
+								value: 0.59,
+								value: 0,
+							},
+							{
+								name: '湖南',
+								value: 0
+							},
+							{
+								name: '安徽',
+								value: 0
+							},
+							{
+								name: '山东',
+								value: 0.99,
+								value: 0,
+							},
+							{
+								name: '新疆',
+								value: 0
+							},
+							{
+								name: '江苏',
+								value: 0
+							},
+							{
+								name: '浙江',
+								value: 0
+							},
+							{
+								name: '江西',
+								value: 0
+							},
+							{
+								name: '湖北',
+								value: 0
+							},
+							{
+								name: '广西',
+								value: 0
+							},
+							{
+								name: '甘肃',
+								value: 0
+							},
+							{
+								name: '山西',
+								value: 0.78,
+								value: 0,
+							},
+							{
+								name: '内蒙古',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '陕西',
+								value: 0
+							},
+							{
+								name: '吉林',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '福建',
+								value: 0
+							},
+							{
+								name: '贵州',
+								value: 0
+							},
+							{
+								name: '广东',
+								value: 0
+							},
+							{
+								name: '青海',
+								value: 0
+							},
+							{
+								name: '西藏',
+								value: 0
+							},
+							{
+								name: '四川',
+								value: 0
+							},
+							{
+								name: '宁夏',
+								value: 0
+							},
+							{
+								name: '海南',
+								value: 0
+							},
+							{
+								name: '台湾',
+								value: 0
+							},
+							{
+								name: '香港',
+								value: 0
+							},
+							{
+								name: '澳门',
+								value: 0
+							}
+						]
+					},
+					{
+						name: '2G小区数',
+						type: 'map',
+						mapType: 'china',
+						zoom: 1.1,
+						roam: true,
+						showLegendSymbol: false,
+						itemStyle: {
+							normal: {
+								label: {
+									show: true
+								}
+							},
+							emphasis: {
+								label: {
+									show: true
+								}
+							}
+						},
+						data: [{
+								name: "南海诸岛",
+								value: 0,
+								itemStyle: {
+									normal: {
+										opacity: 0,
+										label: {
+											show: false
+										}
+									}
+								}
+							},
+							{
+								name: '北京',
+								value: 0.72,
+								value: 0,
+							},
+							{
+								name: '天津',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '上海',
+								value: 0
+							},
+							{
+								name: '重庆',
+								value: 0
+							},
+							{
+								name: '河北',
+								value: 0.46,
+								value: 0,
+							},
+							{
+								name: '河南',
+								value: 0.88,
+								value: 1000
+							},
+							{
+								name: '云南',
+								value: 0
+							},
+							{
+								name: '辽宁',
+								value: 1.89
+							},
+							{
+								name: '黑龙江',
+								value: 0.59,
+								value: 0,
+							},
+							{
+								name: '湖南',
+								value: 0
+							},
+							{
+								name: '安徽',
+								value: 0
+							},
+							{
+								name: '山东',
+								value: 0.99,
+								value: 0,
+							},
+							{
+								name: '新疆',
+								value: 0
+							},
+							{
+								name: '江苏',
+								value: 0
+							},
+							{
+								name: '浙江',
+								value: 0
+							},
+							{
+								name: '江西',
+								value: 0
+							},
+							{
+								name: '湖北',
+								value: 0
+							},
+							{
+								name: '广西',
+								value: 0
+							},
+							{
+								name: '甘肃',
+								value: 0
+							},
+							{
+								name: '山西',
+								value: 0.78,
+								value: 0,
+							},
+							{
+								name: '内蒙古',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '陕西',
+								value: 0
+							},
+							{
+								name: '吉林',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '福建',
+								value: 0
+							},
+							{
+								name: '贵州',
+								value: 0
+							},
+							{
+								name: '广东',
+								value: 0
+							},
+							{
+								name: '青海',
+								value: 0
+							},
+							{
+								name: '西藏',
+								value: 0
+							},
+							{
+								name: '四川',
+								value: 0
+							},
+							{
+								name: '宁夏',
+								value: 0
+							},
+							{
+								name: '海南',
+								value: 0
+							},
+							{
+								name: '台湾',
+								value: 0
+							},
+							{
+								name: '香港',
+								value: 0
+							},
+							{
+								name: '澳门',
+								value: 0
+							}
+						]
+					},
+					{
+						name: '3G小区数',
+						type: 'map',
+						mapType: 'china',
+						zoom: 1.1,
+						roam: true,
+						showLegendSymbol: false,
+						itemStyle: {
+							normal: {
+								label: {
+									show: true
+								}
+							},
+							emphasis: {
+								label: {
+									show: true
+								}
+							}
+						},
+						data: [{
+								name: "南海诸岛",
+								value: 0,
+								itemStyle: {
+									normal: {
+										opacity: 0,
+										label: {
+											show: false
+										}
+									}
+								}
+							},
+							{
+								name: '北京',
+								value: 0.72,
+								value: 0,
+							},
+							{
+								name: '天津',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '上海',
+								value: 0
+							},
+							{
+								name: '重庆',
+								value: 0
+							},
+							{
+								name: '河北',
+								value: 0.46,
+								value: 0,
+							},
+							{
+								name: '河南',
+								value: 0.88,
+								value: 1000
+							},
+							{
+								name: '云南',
+								value: 0
+							},
+							{
+								name: '辽宁',
+								value: 1.89
+							},
+							{
+								name: '黑龙江',
+								value: 0.59,
+								value: 0,
+							},
+							{
+								name: '湖南',
+								value: 0
+							},
+							{
+								name: '安徽',
+								value: 0
+							},
+							{
+								name: '山东',
+								value: 0.99,
+								value: 0,
+							},
+							{
+								name: '新疆',
+								value: 0
+							},
+							{
+								name: '江苏',
+								value: 0
+							},
+							{
+								name: '浙江',
+								value: 0
+							},
+							{
+								name: '江西',
+								value: 0
+							},
+							{
+								name: '湖北',
+								value: 0
+							},
+							{
+								name: '广西',
+								value: 0
+							},
+							{
+								name: '甘肃',
+								value: 0
+							},
+							{
+								name: '山西',
+								value: 0.78,
+								value: 0,
+							},
+							{
+								name: '内蒙古',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '陕西',
+								value: 0
+							},
+							{
+								name: '吉林',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '福建',
+								value: 0
+							},
+							{
+								name: '贵州',
+								value: 0
+							},
+							{
+								name: '广东',
+								value: 0
+							},
+							{
+								name: '青海',
+								value: 0
+							},
+							{
+								name: '西藏',
+								value: 0
+							},
+							{
+								name: '四川',
+								value: 0
+							},
+							{
+								name: '宁夏',
+								value: 0
+							},
+							{
+								name: '海南',
+								value: 0
+							},
+							{
+								name: '台湾',
+								value: 0
+							},
+							{
+								name: '香港',
+								value: 0
+							},
+							{
+								name: '澳门',
+								value: 0
+							}
+						]
+					},
+					{
+						name: '4G小区数',
+						type: 'map',
+						mapType: 'china',
+						zoom: 1.1,
+						roam: true,
+						showLegendSymbol: false,
+						itemStyle: {
+							normal: {
+								label: {
+									show: true
+								}
+							},
+							emphasis: {
+								label: {
+									show: true
+								}
+							}
+						},
+						data: [{
+								name: "南海诸岛",
+								value: 0,
+								itemStyle: {
+									normal: {
+										opacity: 0,
+										label: {
+											show: false
+										}
+									}
+								}
+							},
+							{
+								name: '北京',
+								value: 0.72,
+								value: 0,
+							},
+							{
+								name: '天津',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '上海',
+								value: 0
+							},
+							{
+								name: '重庆',
+								value: 0
+							},
+							{
+								name: '河北',
+								value: 0.46,
+								value: 0,
+							},
+							{
+								name: '河南',
+								value: 0.88,
+								value: 1000
+							},
+							{
+								name: '云南',
+								value: 0
+							},
+							{
+								name: '辽宁',
+								value: 1.89
+							},
+							{
+								name: '黑龙江',
+								value: 0.59,
+								value: 0,
+							},
+							{
+								name: '湖南',
+								value: 0
+							},
+							{
+								name: '安徽',
+								value: 0
+							},
+							{
+								name: '山东',
+								value: 0.99,
+								value: 0,
+							},
+							{
+								name: '新疆',
+								value: 0
+							},
+							{
+								name: '江苏',
+								value: 0
+							},
+							{
+								name: '浙江',
+								value: 0
+							},
+							{
+								name: '江西',
+								value: 0
+							},
+							{
+								name: '湖北',
+								value: 0
+							},
+							{
+								name: '广西',
+								value: 0
+							},
+							{
+								name: '甘肃',
+								value: 0
+							},
+							{
+								name: '山西',
+								value: 0.78,
+								value: 0,
+							},
+							{
+								name: '内蒙古',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '陕西',
+								value: 0
+							},
+							{
+								name: '吉林',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '福建',
+								value: 0
+							},
+							{
+								name: '贵州',
+								value: 0
+							},
+							{
+								name: '广东',
+								value: 0
+							},
+							{
+								name: '青海',
+								value: 0
+							},
+							{
+								name: '西藏',
+								value: 0
+							},
+							{
+								name: '四川',
+								value: 0
+							},
+							{
+								name: '宁夏',
+								value: 0
+							},
+							{
+								name: '海南',
+								value: 0
+							},
+							{
+								name: '台湾',
+								value: 0
+							},
+							{
+								name: '香港',
+								value: 0
+							},
+							{
+								name: '澳门',
+								value: 0
+							}
+						]
+					},
+					{
+						name: '4G扩容小区数',
+						type: 'map',
+						mapType: 'china',
+						zoom: 1.1,
+						roam: true,
+						showLegendSymbol: false,
+						itemStyle: {
+							normal: {
+								label: {
+									show: true
+								}
+							},
+							emphasis: {
+								label: {
+									show: true
+								}
+							}
+						},
+						data: [{
+								name: "南海诸岛",
+								value: 0,
+								itemStyle: {
+									normal: {
+										opacity: 0,
+										label: {
+											show: false
+										}
+									}
+								}
+							},
+							{
+								name: '北京',
+								value: 0.72,
+								value: 0,
+							},
+							{
+								name: '天津',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '上海',
+								value: 0
+							},
+							{
+								name: '重庆',
+								value: 0
+							},
+							{
+								name: '河北',
+								value: 0.46,
+								value: 0,
+							},
+							{
+								name: '河南',
+								value: 0.88,
+								value: 1000
+							},
+							{
+								name: '云南',
+								value: 0
+							},
+							{
+								name: '辽宁',
+								value: 1.89
+							},
+							{
+								name: '黑龙江',
+								value: 0.59,
+								value: 0,
+							},
+							{
+								name: '湖南',
+								value: 0
+							},
+							{
+								name: '安徽',
+								value: 0
+							},
+							{
+								name: '山东',
+								value: 0.99,
+								value: 0,
+							},
+							{
+								name: '新疆',
+								value: 0
+							},
+							{
+								name: '江苏',
+								value: 0
+							},
+							{
+								name: '浙江',
+								value: 0
+							},
+							{
+								name: '江西',
+								value: 0
+							},
+							{
+								name: '湖北',
+								value: 0
+							},
+							{
+								name: '广西',
+								value: 0
+							},
+							{
+								name: '甘肃',
+								value: 0
+							},
+							{
+								name: '山西',
+								value: 0.78,
+								value: 0,
+							},
+							{
+								name: '内蒙古',
+								value: 1.00,
+								value: 0,
+							},
+							{
+								name: '陕西',
+								value: 0
+							},
+							{
+								name: '吉林',
+								value: 0.93,
+								value: 0,
+							},
+							{
+								name: '福建',
+								value: 0
+							},
+							{
+								name: '贵州',
+								value: 0
+							},
+							{
+								name: '广东',
+								value: 0
+							},
+							{
+								name: '青海',
+								value: 0
+							},
+							{
+								name: '西藏',
+								value: 0
+							},
+							{
+								name: '四川',
+								value: 0
+							},
+							{
+								name: '宁夏',
+								value: 0
+							},
+							{
+								name: '海南',
+								value: 0
+							},
+							{
+								name: '台湾',
+								value: 0
+							},
+							{
+								name: '香港',
+								value: 0
+							},
+							{
+								name: '澳门',
+								value: 0
+							}
+						]
+					}
+				]
+
+			}
+			chart.setOption(option6);
+			chart.on("legendselectchanged", function(params) {
+				console.log(params)
+				if(params.name == "EPG质量") {
+					$("#tableGrid").datagrid({
+						url: 'provinceEPG.json'
+					});
+				} else if(params.name == "节目源质量") {
+					$("#tableGrid").datagrid({
+						//							url:
+					});
+				} else if(params.name == "媒体传输质量") {
+					$("#tableGrid").datagrid();
+				} else if(params.name == "业务承载质量") {
+					$("#tableGrid").datagrid();
+				} else if(params.name == "直观感知质量") {
+					$("#tableGrid").datagrid();
+				}
+			})
+
+			//点击地图随机数据 
+			chart.on("click", function(params) {
+				//				console.log(params);
+				//左上图表随机数据
+				option11 = myChart1.getOption();
+				myChart1.clear();
+				option3 = myChart3.getOption();
+				//					option31=myChart31.getOption();
+				myChart3.clear();
+				//					myChart31.clear();
+				option5 = myChart5.getOption();
+				myChart5.clear();
+				option4 = myChart4.getOption();
+				myChart4.clear();
+				if(params.name == "辽宁") {
+					option11.series[0].data = data1[0];
+					option3.series[0].data = data31[0];
+					option3.series[1].data = data31[1];
+					//					option31.series[0].data = data32[0];
+					option5.series[0].data = data5[0];
+					option5.yAxis[0].data = data51[0];
+					option4.series[0].data = data4[0];
+					option4.yAxis[0].data = data41[0];
+				} else {
+					option11.series[0].data = data1[parseInt(Math.random() * data1.length)];
+					option3.series[0].data = data31[parseInt(Math.random() * data31.length)];
+					option3.series[1].data = data31[parseInt(Math.random() * data31.length)];
+					//					option31.series[0].data = data32[parseInt(Math.random() * data32.length)];
+					option5.series[0].data = data5[parseInt(Math.random() * data5.length)];
+					option5.yAxis[0].data = data51[parseInt(Math.random() * data51.length)];
+					option4.series[0].data = data4[parseInt(Math.random() * data4.length)];
+					option4.yAxis[0].data = data41[parseInt(Math.random() * data41.length)];
+				}
+
+				//				 console.log(option11.series[0].data);
+				//				$("#onLine").html(option11.series[0].data[0].value)
+				//				$("#leaveLine").html(option11.series[0].data[1].value);
+				//				$("#onLinePercent").html((Math.random() + 99).toFixed(2) + "%");
+				//				$("#outLinePercent").html((100 - $("#onLinePercent").html().substr(0, 5)).toFixed(2) + "%")
+				myChart1.setOption(option11);
+
+				//左下图表随机数据
+
+				myChart3.setOption(option3);
+				//					myChart31.setOption(option31);
+
+				//右上柱状图随机数据
+
+				myChart5.setOption(option5);
+
+				//右下柱状图随机数据
+
+				myChart4.setOption(option4);
+
+			})
+		});
+	}
+	//
+	function initChart1() {
+
+		myChart1 = echarts.init(document.getElementById("myChart1"));
+		var labelTop = {
+			normal: {
+				color: '#4581d9',
+				label: {
+					show: true,
+					position: 'center',
+					textStyle: {
+						baseline: 'bottom'
+					}
+				},
+				labelLine: {
+					show: false
+				}
+			}
+		};
+		var labelBottom = {
+			normal: {
+				color: 'orange',
+				label: {
+					show: true,
+					position: 'center'
+				},
+				labelLine: {
+					show: false
+				}
+			},
+			emphasis: {
+
+			}
+		};
+
+		var labelFromatter = {
+			normal: {
+
+				label: {
+					formatter: function(params) {
+						return params.percent + '%'
+					},
+					textStyle: {
+						baseline: 'top'
+					}
+				}
+			},
+		}
+
+		var radius = ['43%', '65%'];
+		option11 = {
+			legend: {
+				x: 'left',
+				y: 'top',
+				itemWidth: 20,
+				itemHeight: 12,
+				orient: 'vertical',
+				textStyle: {
+					color: 'auto'
+				},
+				data: [
+					'已恢复', '未恢复'
+				]
+			},
+
+			series: [{
+				type: 'pie',
+				center: ['50%', '50%'],
+				radius: radius,
+				//          x: '0%', // for funnel
+				itemStyle: labelFromatter,
+				data: data1[0],
+			}]
+		};
+		myChart1.setOption(option11);
+	}
+
+	function initChart3() {
+
+		myChart3 = echarts.init(document.getElementById('echart3'));
+		option3 = {
+
+			legend: {
+				orient: 'vertical',
+				x: 'right',
+
+				itemWidth: 20,
+				itemHeight: 12,
+				textStyle: {
+					color: 'auto'
+				},
+
+				data: ['2G', '3G', '4G']
+			},
+
+			series: [
+
+				{
+					name: '数据流量',
+					type: 'pie',
+					radius: ['55%', '70%'],
+					//						center: ['38%', '50%'],
+					startAngle: -90,
+					itemStyle: {
+						normal: {
+							label: {
+								show: true,
+								formatter: '{a}\n{b}\n{d}%',
+
+							},
+							labelLine: {
+								show: true,
+								length: 15,
+								length2: 5
+							}
+						},
+						emphasis: {
+							label: {
+								show: true,
+								position: 'center',
+								//									formatter: '{b}\n{d}\n{c}%',
+								textStyle: {
+									color: 'darkorange'
+								}
+							}
+						}
+					},
+					data: data31[0]
+				},
+				{
+					name: '话务量',
+					type: 'pie',
+					radius: ['0', '25%'],
+					//						center: ['38%', '50%'],
+					startAngle: -90,
+					itemStyle: {
+						normal: {
+							label: {
+								show: true,
+								formatter: '{a}\n{b}\n{d}%',
+								//									position:'inner'
+
+							},
+							labelLine: {
+								show: true,
+								length: 5,
+								length2: 5
+							}
+						},
+						emphasis: {
+							label: {
+								show: true,
+								position: 'center',
+								//									formatter: '{b}\n{d}\n{c}%',
+								textStyle: {
+									color: 'darkorange'
+								}
+							}
+						}
+					},
+					data: data31[1]
+				},
+
+			]
+		};
+
+		myChart3.setOption(option3);
+	}
+
+	function initChart4() {
+
+		myChart4 = echarts.init(document.getElementById('echart4'));
+
+		var option4 = {
+
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'cross'
+				},
+				position: function(pos, params, el, elRect, size) {
+					var obj = {
+						top: 0
+					};
+					obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+					return obj;
+				},
+			},
+			legend: {
+				x: 'left',
+				y: 'bottom',
+				textStyle: {
+					color: 'auto'
+				},
+				data: ['扩容数量']
+			},
+			grid: {
+				//      containLabel: true,
+				x: 80,
+				//  	x1:0,
+				y: 30,
+				y1: 10
+			},
+			xAxis: {
+				type: 'value',
+				//      max:35000,
+				boundaryGap: [0, 0.1],
+				splitLine: {
+					lineStyle: {
+						color: '#334063',
+						fontSize: 12
+					}
+				},
+				axisLabel: {
+					textStyle: {
+						color: '#9fa3b7'
+					},
+					formatter: function(value, index) {
+						//      	console.log(value+"--"+index)
+						return(value / 1000).toFixed(0) + "k"
+					}
+				},
+				axisLine: {
+					textStyle: {
+						color: '#334063'
+					}
+				}
+
+				//      boundaryGap: [0, 0.01]
+			},
+			yAxis: {
+				type: 'category',
+				axisLabel: {
+					textStyle: {
+						color: '#9fa3b7'
+					}
+				},
+				axisLine: {
+					show: false,
+					textStyle: {
+						color: '#334063'
+					}
+				},
+				axisTick: {
+					show: false
+				},
+				data: data41[2]
+
+			},
+			series: [{
+					name: '扩容数量',
+					type: 'bar',
+					barWidth: 8,
+					itemStyle: {
+						normal: {
+							barWidth: 40,
+							barBorderRadius: 5,
+							opacity: 0.7,
+							color: '#3aa7f5',
+							label: {
+								show: true,
+								position: 'right',
+								textStyle: {
+									color: 'skyblue',
+									fontSize: 10
+								}
+							}
+						}
+					},
+					data: data4[2]
+				}
+
+			]
+		};
+
+		myChart4.setOption(option4);
+	}
+
+	function initChart5() {
+
+		myChart5 = echarts.init(document.getElementById("echart5"));
+		var option5 = {
+
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'cross'
+				},
+				position: function(pos, params, el, elRect, size) {
+					var obj = {
+						top: 0
+					};
+					obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+					return obj;
+				},
+			},
+			legend: {
+				x: 'left',
+				y: 'bottom',
+				textStyle: {
+					color: 'auto'
+				},
+				data: ['3G-900', '3G-1800']
+			},
+			grid: {
+				x: 40,
+				//  	x1:0,
+				y: 30,
+				y1: 10
+			},
+			xAxis: {
+				type: 'value',
+				//      max:35000,
+				boundaryGap: [0, 0.1],
+				splitLine: {
+					lineStyle: {
+						color: '#334063',
+						fontSize: 12
+					}
+				},
+				axisLabel: {
+					textStyle: {
+						color: '#9fa3b7'
+					},
+					formatter: function(value, index) {
+						//      	console.log(value+"--"+index)
+						return(value / 1000).toFixed(0) + "k"
+					}
+				},
+				axisLine: {
+					textStyle: {
+						color: '#334063'
+					}
+				}
+
+				//      boundaryGap: [0, 0.01]
+			},
+			yAxis: {
+				type: 'category',
+				axisLabel: {
+					textStyle: {
+						color: '#9fa3b7'
+					}
+				},
+				axisLine: {
+					show: false,
+					textStyle: {
+						color: '#334063'
+					}
+				},
+				axisTick: {
+					show: false
+				},
+				data: data51[0]
+
+			},
+			series: [{
+				name: '3G-900',
+				type: 'bar',
+				barWidth: 8,
+				itemStyle: {
+					normal: {
+						barWidth: 40,
+						barBorderRadius: 5,
+						opacity: 0.9,
+						color: 'skyblue',
+						label: {
+							show: true,
+							position: 'right',
+							textStyle: {
+								color: 'skyblue',
+								fontSize: 10
+							}
+						}
+					}
+				},
+				data: data5[0]
+			}, {
+				name: '3G-1800',
+				type: 'bar',
+				barWidth: 8,
+				itemStyle: {
+					normal: {
+						barWidth: 40,
+						barBorderRadius: 5,
+						opacity: 0.9,
+						color: 'rgb(212,130,100)',
+						label: {
+							show: true,
+							position: 'right',
+							textStyle: {
+								//									color: 'skyblue',
+								fontSize: 10
+							}
+						}
+					}
+				},
+				data: data5[1]
+			}]
+		};
+		myChart5.setOption(option5)
+	}
+
+	function initChart6() {
+
+		myChart6 = echarts.init(document.getElementById('echart6'));
+		option6 = {
+
+			legend: {
+				orient: 'vertical',
+				x: 'right',
+
+				itemWidth: 20,
+				itemHeight: 12,
+				textStyle: {
+					color: 'auto'
+				},
+
+				data: ['2G', '3G', '4G']
+			},
+
+			series: [{
+					name: '断站率',
+					type: 'pie',
+					radius: ['25%', '40%'],
+					center: ['30%', '30%'],
+					startAngle: -90,
+					itemStyle: {
+						normal: {
+							label: {
+								show: true,
+								formatter: '{a}\n{b}\n{d}%',
+								position: 'inside'
+
+							},
+							//								labelLine: {
+							//									show: true,
+							//									length: 15,
+							//									length2: 5
+							//								}
+						},
+						emphasis: {
+							label: {
+								show: true,
+								position: 'center',
+								//									formatter: '{b}\n{d}\n{c}%',
+								textStyle: {
+									color: 'darkorange'
+								}
+							}
+						}
+					},
+					data: [{
+						value: 1.5,
+						name: '2G'
+					}, {
+						value: 2.22,
+						name: '3G'
+					}, {
+						value: 1.96,
+						name: '4G'
+					}]
+				},
+				{
+					name: '断站时长',
+					type: 'pie',
+					radius: ['25%', '40%'],
+					center: ['70%', '70%'],
+					startAngle: -90,
+					itemStyle: {
+						normal: {
+							label: {
+								show: true,
+								formatter: '{a}\n{b}\n{d}%',
+								position: 'inside'
+
+							},
+							labelLine: {
+								show: true,
+								length: 15,
+								length2: 5
+							}
+						},
+						emphasis: {
+							label: {
+								show: true,
+								position: 'center',
+								//									formatter: '{b}\n{d}\n{c}%',
+								textStyle: {
+									color: 'darkorange'
+								}
+							}
+						}
+					},
+					data: [{
+						value: 213.3,
+						name: '2G'
+					}, {
+						value: 237.3,
+						name: '3G'
+					}, {
+						value: 263.9,
+						name: '4G'
+					}]
+				},
+
+			]
+		};
+
+		myChart6.setOption(option6);
+	}
+
+	function initChart7() {
+
+		myChart7 = echarts.init(document.getElementById('echart7'));
+
+		var option7 = {
+			tooltip: {
+				trigger: 'none',
+				axisPointer: {
+					type: 'cross'
+				},
+				position: function(pos, params, el, elRect, size) {
+					var obj = {
+						right: 0,
+						top: 0
+					};
+					//							obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
+					return obj;
+				},
+			},
+			legend: {
+				y: 'bottom',
+				x: 'left',
+				textStyle: {
+					color: 'auto'
+				},
+				data: ['覆盖小区数']
+			},
+			grid: {
+				//      containLabel: true,
+				left: 60,
+				top: 30,
+			},
+			xAxis: {
+				type: 'value',
+				//      max:35000,
+				boundaryGap: [0, 0.1],
+				splitLine: {
+					lineStyle: {
+						color: '#334063',
+						fontSize: 12
+					}
+				},
+				axisLabel: {
+					textStyle: {
+						color: '#9fa3b7'
+					},
+					formatter: function(value, index) {
+						//      	console.log(value+"--"+index)
+						return value.toFixed(0)
+					}
+				},
+				axisLine: {
+					textStyle: {
+						color: '#334063'
+					}
+				}
+
+				//      boundaryGap: [0, 0.01]
+			},
+			yAxis: {
+				type: 'category',
+				axisLabel: {
+					textStyle: {
+						color: '#9fa3b7'
+					}
+				},
+				axisLine: {
+					show: false,
+					textStyle: {
+						color: '#334063'
+					}
+				},
+				axisTick: {
+					show: false
+				},
+				//						data: data41[parseInt(Math.random() * data4.length)],
+				data: ['太原', '北京', '石家庄', '沈阳', '哈尔滨', '天津', '长春', '郑州', '呼和浩特', '济南']
+
+			},
+			series: [{
+					name: '覆盖小区数',
+					type: 'bar',
+					barWidth: 8,
+					itemStyle: {
+						normal: {
+							barWidth: 40,
+							barBorderRadius: 5,
+							opacity: 0.7,
+							//									color: '#3aa7f5',
+							color: '#91c7ae',
+							label: {
+								show: true,
+								position: 'right',
+								textStyle: {
+									color: 'skyblue',
+									fontSize: 10
+								}
+							}
+						}
+					},
+					data: data4[0],
+					data: [468, 536, 640, 852, 867, 1175, 1265, 1561, 1688, 2263]
+				}
+
+			]
+		};
+
+		myChart7.setOption(option7);
+	}
+
+	function initChart8() {
+
+		myChart8 = echarts.init(document.getElementById("echart8"));
+		var option8 = {
+			tooltip: {
+				formatter: "{a} <br/>{b} : {c}%"
+			},
+
+			series: [{
+				name: '速度',
+				type: 'gauge',
+				min: 0,
+				max: 220,
+				splitNumber: 11,
+				radius: '80%',
+				axisLine: { // 坐标轴线
+					lineStyle: { // 属性lineStyle控制线条样式
+						color: [
+							[0.09, 'lime'],
+							[0.82, '#1e90ff'],
+							[1, '#ff4500']
+						],
+						width: 3,
+						shadowColor: '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisLabel: { // 坐标轴小标记
+					textStyle: { // 属性lineStyle控制线条样式
+						fontWeight: 'bolder',
+						color: '#fff',
+						shadowColor: '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisTick: { // 坐标轴小标记
+					length: 15, // 属性length控制线长
+					lineStyle: { // 属性lineStyle控制线条样式
+						color: 'auto',
+						shadowColor: '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				splitLine: { // 分隔线
+					length: 25, // 属性length控制线长
+					lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+						width: 3,
+						color: '#fff',
+						shadowColor: '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				pointer: { // 分隔线
+					shadowColor: '#fff', //默认透明
+					shadowBlur: 5
+				},
+				title: {
+					textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						fontSize: 20,
+						fontStyle: 'italic',
+						color: '#fff',
+						shadowColor: '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				detail: {
+					backgroundColor: 'rgba(30,144,255,0.8)',
+					borderWidth: 1,
+					borderColor: '#fff',
+					shadowColor: '#fff', //默认透明
+					shadowBlur: 5,
+					offsetCenter: [0, '50%'], // x, y，单位px
+					textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						color: '#fff'
+					}
+				},
+				data: [{
+					value: 27.64,
+					name: 'Mbps'
+				}]
+			}, ]
+		};
+		myChart8.setOption(option8)
+	}
+
+	function initChart9() {
+
+		myChart9 = echarts.init(document.getElementById('echart9'));
+		var option9 = {
+			tooltip: {
+				formatter: "{a} <br/>{b} : {c}%"
+			},
+
+			series: [{
+				name: '速度',
+				type: 'gauge',
+				min: 0,
+				max: 220,
+				splitNumber: 11,
+				radius: '80%',
+				axisLine: { // 坐标轴线
+					lineStyle: { // 属性lineStyle控制线条样式
+						color: [
+							[0.09, 'lime'],
+							[0.82, '#1e90ff'],
+							[1, '#ff4500']
+						],
+						width: 3,
+						shadowColor: '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisLabel: { // 坐标轴小标记
+					textStyle: { // 属性lineStyle控制线条样式
+						fontWeight: 'bolder',
+						color: '#fff',
+						shadowColor: '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				axisTick: { // 坐标轴小标记
+					length: 15, // 属性length控制线长
+					lineStyle: { // 属性lineStyle控制线条样式
+						color: 'auto',
+						shadowColor: '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				splitLine: { // 分隔线
+					length: 25, // 属性length控制线长
+					lineStyle: { // 属性lineStyle（详见lineStyle）控制线条样式
+						width: 3,
+						color: '#fff',
+						shadowColor: '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				pointer: { // 分隔线
+					shadowColor: '#fff', //默认透明
+					shadowBlur: 5
+				},
+				title: {
+					textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						fontSize: 20,
+						fontStyle: 'italic',
+						color: '#fff',
+						shadowColor: '#fff', //默认透明
+						shadowBlur: 10
+					}
+				},
+				detail: {
+					backgroundColor: 'rgba(30,144,255,0.8)',
+					borderWidth: 1,
+					borderColor: '#fff',
+					shadowColor: '#fff', //默认透明
+					shadowBlur: 5,
+					offsetCenter: [0, '50%'], // x, y，单位px
+					textStyle: { // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+						fontWeight: 'bolder',
+						color: '#fff'
+					}
+				},
+				data: [{
+					value: 10.52,
+					name: '%'
+				}]
+			}, ]
+		};
+		myChart9.setOption(option9);
+	}
+</script>
